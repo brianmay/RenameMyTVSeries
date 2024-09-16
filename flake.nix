@@ -53,10 +53,7 @@
           architectures = ["x86"];
         };
       };
-      wrapper = pkgs.writeShellScriptBin "RenameMyTVSeries" ''
-        exec ${pkg}/bin/RenameMyTVSeries "$@"
-      '';
     in
-      wrapper;
+      pkg;
   };
 }
