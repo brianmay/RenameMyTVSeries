@@ -27,6 +27,7 @@
           pkgs.libnotify
           pkgs.pango
           pkgs.sqlite
+          pkgs.openssl
         ];
 
         sourceRoot = ".";
@@ -40,6 +41,10 @@
           ln -s ../opt/RenameMyTVSeries "$out/bin"
         '';
 
+        postFixup = ''
+          patchelf --add-needed libcrypto.so "$out/opt/RenameMyTVSeries"
+        '';
+
         meta = {
           description = "A tool to rename tv series episodes";
           homepage = "https://www.tweaking4all.com/home-theatre/rename-my-tv-series-v2/";
@@ -49,7 +54,6 @@
         };
       };
       wrapper = pkgs.writeShellScriptBin "RenameMyTVSeries" ''
-        export LD_LIBRARY_PATH="${pkgs.openssl.out}/lib:$LD_LIBRARY_PATH"
         exec ${pkg}/bin/RenameMyTVSeries "$@"
       '';
     in
