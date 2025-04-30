@@ -37,7 +37,6 @@
               pkgs.sqlite
               pkgs.openssl
               pkgs.libqt5pas
-              pkgs.xorg.libxcb
             ];
 
             sourceRoot = ".";
