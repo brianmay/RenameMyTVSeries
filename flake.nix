@@ -1,6 +1,6 @@
 {
   description = "Rename My TV Series package";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
 
   outputs =
     {
@@ -11,9 +11,11 @@
       packages.x86_64-linux.default =
         let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          lib = pkgs.lib;
           src = pkgs.fetchurl {
-            url = "https://www.tweaking4all.com/downloads/video/RenameMyTVSeries-2.0.10-Linux64bit.tar.gz";
-            sha256 = "sha256-PlSkIKtWJHDZ0JIG2NU1H5o3dpkhvf9FOCefgwYfa6E=";
+            url = "https://www.tweaking4all.com/downloads/betas/RenameMyTVSeries-2.1.8-QT5-beta-Linux-64bit-shared-ffmpeg.tar.gz";
+            sha256 = "sha256-4QSP2lzilfeX8LcYUS+TNo0GR3260os4Xhe7OiZGFhM=";
+            # sha256 = lib.fakeSha256;
           };
           pkg = pkgs.stdenv.mkDerivation {
             pname = "RenameMyTVSeries";
@@ -21,7 +23,10 @@
 
             src = src;
 
-            nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+            nativeBuildInputs = [
+              pkgs.autoPatchelfHook
+              pkgs.libsForQt5.wrapQtAppsHook
+            ];
 
             buildInputs = [
               pkgs.atk
@@ -31,6 +36,8 @@
               pkgs.pango
               pkgs.sqlite
               pkgs.openssl
+              pkgs.libqt5pas
+              pkgs.xorg.libxcb
             ];
 
             sourceRoot = ".";
