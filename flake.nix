@@ -52,6 +52,8 @@
 
             postFixup = ''
               patchelf --add-needed libcrypto.so "$out/opt/RenameMyTVSeries"
+              wrapProgram $out/bin/RenameMyTVSeries \
+                --prefix PATH : "${lib.makeBinPath [ pkgs.ffmpeg ]}"
             '';
 
             meta = {
