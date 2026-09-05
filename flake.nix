@@ -1,6 +1,6 @@
 {
   description = "Rename My TV Series package";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
   outputs =
     {
@@ -13,30 +13,32 @@
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           lib = pkgs.lib;
           src = pkgs.fetchurl {
-            url = "https://www.tweaking4all.com/downloads/betas/RenameMyTVSeries-2.1.8-QT5-beta-Linux-64bit-shared-ffmpeg.tar.gz";
-            sha256 = "sha256-4QSP2lzilfeX8LcYUS+TNo0GR3260os4Xhe7OiZGFhM=";
-            # sha256 = lib.fakeSha256;
+            url = "https://www.tweaking4all.com/downloads/video/RenameMyTVSeries-2.3.12-GTK-Linux-x64-shared-ffmpeg.tar.xz";
+            sha256 = "sha256-pESWXTju6HMdtZhr4gRvyIGrDnMW2XXKjFWdJy7B+4w=";
           };
           pkg = pkgs.stdenv.mkDerivation {
             pname = "RenameMyTVSeries";
-            version = "2.0.10";
+            version = "2.3.12";
 
             src = src;
 
             nativeBuildInputs = [
               pkgs.autoPatchelfHook
-              pkgs.libsForQt5.wrapQtAppsHook
+              pkgs.makeWrapper
             ];
 
             buildInputs = [
-              pkgs.atk
-              pkgs.cairo
               pkgs.gtk2
-              pkgs.libnotify
+              pkgs.glib
+              pkgs.gdk-pixbuf
               pkgs.pango
+              pkgs.cairo
+              pkgs.atk
               pkgs.sqlite
+              pkgs.libnotify
+              pkgs.libX11
               pkgs.openssl
-              pkgs.libqt5pas
+              pkgs.ffmpeg_7
             ];
 
             sourceRoot = ".";
@@ -53,7 +55,7 @@
             postFixup = ''
               patchelf --add-needed libcrypto.so "$out/opt/RenameMyTVSeries"
               wrapProgram $out/bin/RenameMyTVSeries \
-                --prefix PATH : "${lib.makeBinPath [ pkgs.ffmpeg ]}"
+                --prefix PATH : "${lib.makeBinPath [ pkgs.ffmpeg_7 ]}"
             '';
 
             meta = {
